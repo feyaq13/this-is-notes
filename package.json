@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "browser-sync start --directory --server . --files src",
+    "test": "standard && node main.js"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "standard": "*"
+  }
+}
