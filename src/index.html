@@ -11,8 +11,30 @@
 </head>
 
 <body>
+  <div class="container-fluid h-100 bg-light">
+    <div class="row h-100">
+      <div class="notes-container col-4 p-0"></div>
 
-  <script src="main.js"></script>
+      <div class="create-notes py-4 col-8">
+        <label for="exampleFormControlTextarea1" class="w-100">
+          <input type="text" class="create-note-header bg-transparent rounded form-control" placeholder="Новая заметка"
+            aria-label="а" aria-describedby="basic-addon1">
+        </label>
+        <textarea class="create-note-text shadow-sm bg-light form-control mb-2" id="exampleFormControlTextarea1"
+          rows="5"></textarea>
+        <button type="button" class="btn-create-note btn btn-light">Создать</button>
+      </div>
+    </div>
+
+    <template id="template-maked-note">
+      <div class="note border-bottom p-2">
+        <p class="note-header font-weight-bold text-truncate"></p>
+        <p class="note-text text-truncate m-0" title=""></p>
+        <time class="datetime font-italic" datetime=""></time>
+      </div>
+    </template>
+
+    <script src="main.js"></script>
 </body>
 
 </html>
