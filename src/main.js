@@ -34,6 +34,7 @@ function addNote () {
   const date = getTimeNote();
 
   notebook.addNote(header, text);
+  saveNotes(notebook);
 
   const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note');
   const element = templateMadeNote.cloneNode(true);
@@ -43,6 +44,10 @@ function addNote () {
   element.querySelector('.datetime').attributes[1].value = date;
   element.querySelector('.datetime').textContent = date;
   return notesContainer.appendChild(element);
+}
+
+function saveNotes (userNotebook) {
+  localStorage.notes = JSON.stringify(userNotebook.notes);
 }
 
 function init () {
