@@ -49,6 +49,8 @@ function addNote () {
   notebook.addNote(header, text);
   saveNotes(notebook);
 
+  const simplebarContent = notesContainer.querySelector('.simplebar-content');
+
   const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note');
   const element = templateMadeNote.cloneNode(true);
   element.querySelector('.note-header').textContent = header;
@@ -56,7 +58,7 @@ function addNote () {
   element.querySelector('.note-text').attributes[1].value = text;
   element.querySelector('.datetime').attributes[1].value = date;
   element.querySelector('.datetime').textContent = date;
-  return notesContainer.appendChild(element);
+  return simplebarContent.appendChild(element);
 }
 
 function renderNotebook (userNotebook) {
