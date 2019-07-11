@@ -8,7 +8,8 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "murmurhash3js": "^3.0.1",
-    "popper.js": "^1.15.0"
+    "popper.js": "^1.15.0",
+    "simplebar": "^4.1.0"
   },
   "devDependencies": {
     "browser-sync": "^2.26.7",

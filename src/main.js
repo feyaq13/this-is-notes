@@ -1,7 +1,8 @@
 const createNoteHeader = document.querySelector('.create-note-header');
 const btnCreateNote = document.querySelector('.btn-create-note');
 const createNoteText = document.querySelector('.create-note-text');
-const notesContainer = document.querySelector('.notes-container');
+const simpleBar = new SimpleBar(document.querySelector('.notes-container'));
+const notesContainer = simpleBar.getContentElement();
 const hash = murmurHash3.x86.hash128;
 
 const notebook = {
