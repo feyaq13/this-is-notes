@@ -50,7 +50,7 @@ function addNote () {
   notebook.addNote(header, text);
   saveNotes(notebook);
 
-  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note');
+  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
   const element = templateMadeNote.cloneNode(true);
   element.querySelector('.note-header').textContent = header;
   element.querySelector('.note-text').textContent = text;
@@ -64,7 +64,7 @@ function renderNotebook (userNotebook) {
   if (!userNotebook.notes.length) {
     return;
   }
-  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note');
+  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
   for (let i = 0; i < userNotebook.notes.length; i++) {
     const noteElement = templateMadeNote.cloneNode(true);
     noteElement.querySelector('.note-header').textContent = userNotebook.notes[i].title;
@@ -80,12 +80,24 @@ function saveNotes (userNotebook) {
   localStorage.notes = JSON.stringify(userNotebook.notes);
 }
 
+function showMethodsForNote (e) {
+  e.currentTarget.querySelector('.menu').style.visibility = 'visible';
+}
+
+function hiddenMethodsForNote (e) {
+  e.currentTarget.querySelector('.menu').style.visibility = 'hidden';
+}
+
 function init () {
   // разобраться с докой момента, относительные даты, формат вывода и тд
   moment.locale('ru');
   createNoteHeader.focus();
-  btnCreateNote.addEventListener('click', addNote);
   renderNotebook(notebook);
+  btnCreateNote.addEventListener('click', addNote);
+  Array.from(notesContainer.children).forEach(function (note) {
+    note.addEventListener('mouseover', showMethodsForNote);
+    note.addEventListener('mouseout', hiddenMethodsForNote);
+  });
 }
 
 function getHeader () {
