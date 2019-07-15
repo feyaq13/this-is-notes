@@ -4,7 +4,8 @@ html {
 }
 
 .create-notes {
-  background: url("https://www.toptal.com/designers/subtlepatterns/patterns/notebook.png");
+  background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/notebook.png");
+  background-size: contain;
 }
 
 .note-wrapper {

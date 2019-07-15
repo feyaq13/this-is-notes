@@ -48,7 +48,6 @@ function addNote () {
   const date = getTimeNote();
 
   notebook.addNote(header, text);
-  saveNotes(notebook);
 
   const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
   const element = templateMadeNote.cloneNode(true);
@@ -57,7 +56,9 @@ function addNote () {
   element.querySelector('.note-text').attributes[1].value = text;
   element.querySelector('.datetime').attributes[1].value = date;
   element.querySelector('.datetime').textContent = date;
-  return notesContainer.appendChild(element);
+
+  notesContainer.appendChild(element);
+  saveNotes(notebook);
 }
 
 function renderNotebook (userNotebook) {
@@ -92,6 +93,8 @@ function init () {
   // разобраться с докой момента, относительные даты, формат вывода и тд
   moment.locale('ru');
   createNoteHeader.focus();
+  createNoteHeader.value = '';
+  createNoteText.value = '';
   renderNotebook(notebook);
   btnCreateNote.addEventListener('click', addNote);
   Array.from(notesContainer.children).forEach(function (note) {
