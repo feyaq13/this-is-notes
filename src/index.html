@@ -18,7 +18,8 @@
 
       <div class="create-notes py-4 col-8">
         <label for="exampleFormControlTextarea1" class="w-100">
-          <input type="text" class="create-note-header bg-transparent rounded form-control" placeholder="Новая заметка"
+          <!-- расследовать про автофокус -->
+          <input type="text" class="create-note-header bg-transparent rounded form-control" autofocus placeholder="Новая заметка"
             aria-label="а" aria-describedby="basic-addon1">
         </label>
         <textarea class="create-note-text shadow-sm bg-light form-control mb-2" id="exampleFormControlTextarea1"
@@ -45,6 +46,7 @@
   </div>
   </template>
 
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../node_modules/moment/min/moment.min.js"></script>
   <script src="../node_modules/moment/min/locales.min.js"></script>
   <script src="../node_modules/murmurhash3js/murmurhash3js.min.js"></script>

@@ -22,6 +22,10 @@ html {
   visibility: hidden;
 }
 
+.menu-visible {
+  visibility: visible;
+}
+
 .edit,
 .delete {
   cursor: pointer;

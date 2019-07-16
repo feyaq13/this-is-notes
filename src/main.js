@@ -1,3 +1,6 @@
+moment.locale('ru');
+moment.defaultFormat = 'YYYY-MM-DD ddd HH:mm:ss'
+
 const createNoteHeader = document.querySelector('.create-note-header');
 const btnCreateNote = document.querySelector('.btn-create-note');
 const createNoteText = document.querySelector('.create-note-text');
@@ -9,35 +12,29 @@ const notebook = {
   notes: [],
   selectedNote: null,
   addNote: function (title, body) {
-    this.notes.push(new Note(title, body));
-    // console.log(this.notes);
+    const newNote = new Note(title, body)
+    this.notes.push(newNote);
+
+    return newNote;
   },
   selectNote: function (note) {
     this.selectedNote = note;
   }
 };
 
-notebook.notes = restoreNotebook();
+notebook.notes = createOrRestoreNotes();
 
-function restoreNotebook () {
+function createOrRestoreNotes () {
   if (localStorage.notes) {
-    return JSON.parse(localStorage.notes);
-  }
-  return createNotebook();
-}
+    const notes = JSON.parse(localStorage.notes)
+    notes.forEach(note => {
+      note.createdAt = moment.unix(note.createdAt)
+    })
 
-function createNotebook () {
+    return notes;
+  }
+
   return [];
-}
-
-class Note {
-  constructor (title, body) {
-    this.id = hash(Math.random().toString());
-    this.title = title;
-    this.body = body;
-    this.createdAt = moment().format('YYYY-MM-DD ddd HH:mm:ss');
-    this.deleted = false;
-  }
 }
 
 init();
@@ -45,62 +42,49 @@ init();
 function addNote () {
   const header = getHeader();
   const text = getText();
-  const date = getTimeNote();
-
-  notebook.addNote(header, text);
-
-  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
-  const element = templateMadeNote.cloneNode(true);
-  element.querySelector('.note-header').textContent = header;
-  element.querySelector('.note-text').textContent = text;
-  element.querySelector('.note-text').attributes[1].value = text;
-  element.querySelector('.datetime').attributes[1].value = date;
-  element.querySelector('.datetime').textContent = date;
-
-  notesContainer.appendChild(element);
+  const note = notebook.addNote(header, text);
+  appendNoteTemplate(note)
   saveNotes(notebook);
+  createNoteHeader.value = '';
+  createNoteText.value = '';
+}
+
+function appendNoteTemplate(note) {
+  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
+  const noteElement = templateMadeNote.cloneNode(true);
+  noteElement.querySelector('.note-header').textContent = note.title;
+  noteElement.querySelector('.note-text').textContent = note.body;
+  noteElement.querySelector('.datetime').textContent = note.createdAt.format();
+  notesContainer.appendChild(noteElement);
 }
 
 function renderNotebook (userNotebook) {
-  if (!userNotebook.notes.length) {
-    return;
-  }
-  const templateMadeNote = document.querySelector('#template-made-note').content.querySelector('.note-wrapper');
-  for (let i = 0; i < userNotebook.notes.length; i++) {
-    const noteElement = templateMadeNote.cloneNode(true);
-    noteElement.querySelector('.note-header').textContent = userNotebook.notes[i].title;
-    noteElement.querySelector('.note-text').textContent = userNotebook.notes[i].body;
-    noteElement.querySelector('.note-text').attributes[1].value = userNotebook.notes[i].body;
-    noteElement.querySelector('.datetime').attributes[1].value = userNotebook.notes[i].createdAt;
-    noteElement.querySelector('.datetime').textContent = userNotebook.notes[i].createdAt;
-    notesContainer.appendChild(noteElement);
-  }
+  userNotebook.notes.forEach(appendNoteTemplate);
 }
 
 function saveNotes (userNotebook) {
-  localStorage.notes = JSON.stringify(userNotebook.notes);
+  localStorage.notes = JSON.stringify(userNotebook.notes.map(note => {
+    return {
+      id: note.id,
+      title: note.title,
+      body: note.body,
+      createdAt: note.createdAt.unix(),
+      deleted: note.deleted
+    }
+  }));
 }
 
-function showMethodsForNote (e) {
-  e.currentTarget.querySelector('.menu').style.visibility = 'visible';
-}
-
-function hiddenMethodsForNote (e) {
-  e.currentTarget.querySelector('.menu').style.visibility = 'hidden';
+function toggleOverlay (e) {
+  // разкостылить
+  $(e.target).closest('.row').children('.menu').toggleClass('menu-visible')
 }
 
 function init () {
   // разобраться с докой момента, относительные даты, формат вывода и тд
-  moment.locale('ru');
-  createNoteHeader.focus();
-  createNoteHeader.value = '';
-  createNoteText.value = '';
   renderNotebook(notebook);
   btnCreateNote.addEventListener('click', addNote);
-  Array.from(notesContainer.children).forEach(function (note) {
-    note.addEventListener('mouseover', showMethodsForNote);
-    note.addEventListener('mouseout', hiddenMethodsForNote);
-  });
+  notesContainer.addEventListener('mouseover', toggleOverlay);
+  notesContainer.addEventListener('mouseout', toggleOverlay);
 }
 
 function getHeader () {
@@ -111,6 +95,12 @@ function getText () {
   return createNoteText.value;
 }
 
-function getTimeNote () {
-  return moment().format('YYYY-MM-DD ddd HH:mm:ss');
+class Note {
+  constructor (title, body) {
+    this.id = hash(Math.random().toString());
+    this.title = title;
+    this.body = body;
+    this.createdAt = moment();
+    this.deleted = false;
+  }
 }
